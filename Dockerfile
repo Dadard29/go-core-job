@@ -1,0 +1,21 @@
+FROM golang:1.13-alpine
+
+ARG ARG_API_HOST
+ARG ARG_API_PORT
+ARG ARG_PERIOD
+ARG ARG_PROTECTED_TOKEN
+
+ENV API_HOST=$ARG_API_HOST
+ENV API_PORT=$ARG_API_PORT
+ENV PERIOD=$ARG_PERIOD
+ENV PROTECTED_TOKEN=$ARG_PROTECTED_TOKEN
+
+RUN apk add --update git gcc libc-dev
+
+WORKDIR /go/src/app
+COPY . .
+
+RUN go get -d -v ./...
+RUN go install -v ./...
+
+CMD ["app"]
