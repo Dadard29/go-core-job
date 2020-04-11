@@ -28,6 +28,8 @@ func main() {
 
 	c := connector.NewCoreConnector(podIp, podPort, protectedToken)
 
+	fmt.Println("starting ticker with period", periodStr)
+
 	tick := time.NewTicker(time.Second * time.Duration(period))
 	done := make(chan bool)
 	go func(tick *time.Ticker, done chan bool) {
