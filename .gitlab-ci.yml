@@ -1,0 +1,29 @@
+image: docker:stable
+stages:
+  - build
+  - deploy
+
+services:
+  - docker:dind
+
+build:
+  stage: build
+  script:
+    - docker info
+    - echo "registering with $REGISTRY_USERNAME $REGISTRY_PASSWORD"
+    - echo $REGISTRY_PASSWORD | docker login -u $REGISTRY_USERNAME --password-stdin registry.gitlab.com
+    - docker build -t $IMAGE_NAME --build-arg ARG_API_HOST=$ARG_API_HOST --build-arg ARG_API_PORT=$ARG_API_PORT --build-arg ARG_PERIOD=$ARG_PERIOD --build-arg ARG_PROTECTED_TOKEN=$ARG_PROTECTED_TOKEN .
+    - docker push $IMAGE_NAME
+
+deploy:
+  stage: deploy
+  script:
+    - apk add --update curl wget
+    - wget https://git.dadard.fr/dadard/scripts/raw/branch/master/deploy.sh
+    - export CONTAINER_NAME
+    - export IMAGE_NAME
+    - export POD_NAME
+    - export DEPLOYER_URL
+    - export DEPLOYER_TOKEN
+    - echo "deploying container $CONTAINER_NAME ($IMAGE_NAME) with API $DEPLOYER_URL, $DEPLOYER_TOKEN in pod $POD_NAME"
+    - sh deploy.sh
