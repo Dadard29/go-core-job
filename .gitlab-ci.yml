@@ -12,7 +12,7 @@ build:
     - docker info
     - echo "registering with $REGISTRY_USERNAME $REGISTRY_PASSWORD"
     - echo $REGISTRY_PASSWORD | docker login -u $REGISTRY_USERNAME --password-stdin registry.gitlab.com
-    - docker build -t $IMAGE_NAME --build-arg ARG_API_HOST=$ARG_API_HOST --build-arg ARG_API_PORT=$ARG_API_PORT --build-arg ARG_PERIOD=$ARG_PERIOD --build-arg ARG_PROTECTED_TOKEN=$ARG_PROTECTED_TOKEN --build-arg ARG_WEEKDAY=$ARG_WEEKDAY.
+    - docker build -t $IMAGE_NAME --build-arg ARG_API_HOST=$ARG_API_HOST --build-arg ARG_API_PORT=$ARG_API_PORT --build-arg ARG_PERIOD=$ARG_PERIOD --build-arg ARG_PROTECTED_TOKEN=$ARG_PROTECTED_TOKEN --build-arg ARG_WEEKDAY=$ARG_WEEKDAY .
     - docker push $IMAGE_NAME
 
 deploy:
