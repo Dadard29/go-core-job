@@ -3,18 +3,21 @@ package connector
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
-func (c CoreConnector) Job() error {
+func (c CoreConnector) Job(weekday int) error {
 	var resp *response
 	var err error
-	//if resp, err = c.checkUsersInactivity(); err != nil {
-	//	return err
-	//} else if !resp.status {
-	//	return errors.New(resp.message)
-	//}
+
+	todayWeekday := time.Now().Weekday()
+	if int(todayWeekday) != weekday {
+		fmt.Println("wrong weekday")
+		return nil
+	}
 
 	if resp, err = c.resetRequestCount(); err != nil {
 		return err

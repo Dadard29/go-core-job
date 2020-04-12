@@ -30,11 +30,18 @@ func main() {
 
 	fmt.Println("starting ticker with period", periodStr)
 
+	// weekday
+	weekdayStr := os.Getenv("WEEKDAY")
+	weekday, err := strconv.Atoi(weekdayStr)
+	if err != nil {
+		panic(err)
+	}
+
 	tick := time.NewTicker(time.Second * time.Duration(period))
 	done := make(chan bool)
 	go func(tick *time.Ticker, done chan bool) {
 		fmt.Println("first tick")
-		err := c.Job()
+		err := c.Job(weekday)
 		if err != nil {
 			fmt.Printf("[ERROR] %v\n", err.Error())
 		}
@@ -43,8 +50,7 @@ func main() {
 			select {
 			case t := <-tick.C:
 				fmt.Println("tick", t)
-				fmt.Println("executing job")
-				err := c.Job()
+				err := c.Job(weekday)
 				if err != nil {
 					fmt.Printf("[ERROR] %v\n", err)
 				}
